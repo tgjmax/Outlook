@@ -1,0 +1,16 @@
+# Don't track these files
+*.ipynb
+*.pyc
+.env
+ngrok.exe
+config/ServiceAccountToken.json
+config.json
+
+# Don't track these folders
+.idea/
+.ipynb_checkpoints/
+venv/
+env/
+__pycache__/
+node_modules/
+.vscode/
