@@ -12,6 +12,7 @@
 
     <!-- Office JavaScript API -->
     <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
     <!-- For more information on Office UI Fabric, visit https://developer.microsoft.com/fabric. -->
     <link rel="stylesheet"
@@ -23,25 +24,26 @@
 
 <body class="ms-font-m ms-welcome ms-Fabric">
 
-    <section class="ms-font-m">
-        <p class="ms-font-m">This sample shows how to get, add, and remove <b>master categories</b> on the mailbox.</p>
+    <section class="ms-text ms-font-m">
+        <p class="ms-font-m">Add or Remove <b>master/built-in categories</b> in the mailbox.</p>
     </section>
 
-    <section class="samples ms-font-m">
-        <h3>Try it out</h3>
-        <button id="add-master-categories" class="ms-Button">
-            <span class="ms-Button-label">Add category to master list</span>
-        </button>
-        <button id="get-master-categories" class="ms-Button">
-            <span class="ms-Button-label">Get categories master list</span>
-        </button>
-        <button id="remove-master-categories" class="ms-Button">
-            <span class="ms-Button-label">Remove category from master list</span>
-        </button>
-        <button id="remove-builtin-categories" class="ms-Button">
-            <span class="ms-Button-label">Remove built-in categories</span>
-        </button>
-    </section>
+    <div class="container">
+        <section class="samples ms-text ms-font-m">
+            <button id="add-master-categories" class="ms-Button btn btn-primary">
+                <span class="ms-Button-label">Add custom categories</span>
+            </button>
+            <!-- <button id="get-master-categories" class="ms-Button">
+                <span class="ms-Button-label">Get categories master list</span>
+            </button> -->
+            <button id="remove-master-categories" class="ms-Button btn btn-danger">
+                <span class="ms-Button-label">Remove custom categories</span>
+            </button>
+            <button id="remove-builtin-categories" class="ms-Button btn btn-danger">
+                <span class="ms-Button-label">Remove built-in categories</span>
+            </button>
+        </section>
+    </div>
 
     <main id="app-body" class="ms-welcome__main" style="display: none;">
         <h2 class="ms-font-xl"> Discover what Office Add-ins can do for you today! </h2>

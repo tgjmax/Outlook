@@ -14,10 +14,29 @@ Office.onReady(() => {
 function action(event) {
   const message = {
     type: Office.MailboxEnums.ItemNotificationMessageType.InformationalMessage,
-    message: "Performed action.",
+    message: "Categories from the master list added successfully!",
     icon: "Icon.80x80",
     persistent: true
   };
+
+  var masterCategoriesToAdd = [
+    {
+      displayName: "Non-Bot Mails",
+      color: Office.MailboxEnums.CategoryColor.Preset3
+    },
+    {
+      displayName: "Bot Mails",
+      color: Office.MailboxEnums.CategoryColor.Preset4
+    }
+  ];
+
+  Office.context.mailbox.masterCategories.addAsync(masterCategoriesToAdd, function (asyncResult) {
+    if (asyncResult.status === Office.AsyncResultStatus.Succeeded) {
+      console.log("Successfully added categories to master list");
+    } else {
+      console.log("masterCategories.addAsync call failed with error: " + asyncResult.error.message);
+    }
+  });
 
   // Show a notification message
   Office.context.mailbox.item.notificationMessages.replaceAsync("action", message);
@@ -30,10 +49,10 @@ function getGlobal() {
   return typeof self !== "undefined"
     ? self
     : typeof window !== "undefined"
-    ? window
-    : typeof global !== "undefined"
-    ? global
-    : undefined;
+      ? window
+      : typeof global !== "undefined"
+        ? global
+        : undefined;
 }
 
 const g = getGlobal();
