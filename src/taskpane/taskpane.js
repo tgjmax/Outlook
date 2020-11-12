@@ -11,34 +11,56 @@ Office.onReady(info => {
         // document.getElementById("app-body").style.display = "flex";
         // document.getElementById("run").onclick = run;
         // document.getElementById("get-master-categories").onclick = getMasterCategories;
+        var cat_list = document.getElementById('cat-list').getAttribute("data-cat");
+        if(!cat_list){
+            document.getElementById("add-master-categories").disabled = true;
+            document.getElementById("remove-master-categories").disabled = true;
+            document.getElementById("remove-builtin-categories").disabled = true;
+        }
+
+        document.getElementById("email").value = Office.context.mailbox.userProfile.emailAddress
+        document.getElementById("get-master-categories").onclick = getMasterCategories;
         document.getElementById("add-master-categories").onclick = addMasterCategories;
         document.getElementById("remove-master-categories").onclick = removeMasterCategories;
         document.getElementById("remove-builtin-categories").onclick = removeBuiltinCategories
     }
 });
 
-// function getMasterCategories() {
-//   Office.context.mailbox.masterCategories.getAsync(function (asyncResult) {
-//       if (asyncResult.status === Office.AsyncResultStatus.Succeeded) {
-//           var categories = asyncResult.value;
-//           if (categories && categories.length > 0) {
-//               console.log("Master categories:");
-//               console.log(JSON.stringify(categories));
-//           } else {
-//               console.log("There are no categories in the master list.");
-//           }
-//       } else {
-//           console.error(asyncResult.error);
-//       }
-//   });
-// }
+function getMasterCategories() {
+    $(document).ready(function() {
+        $.ajax({
+          url: "http://f367b06b76a6.ngrok.io/api/categories",
+          type: "POST",
+          data: {
+              email: $('#email').val()
+          },
+        //   xhrFields: {
+        //       withCredentials: true
+        //     },
+        //   crossDomain: true,
+          success: function(data) {
+            console.log(data['categories']);
+            console.log(data['color']);
+
+            $("#cat-list").attr("data-cat", data['categories']);
+            $("#cat-list").attr("data-color", data['color']);
+
+            document.getElementById("add-master-categories").disabled = false;
+            document.getElementById("remove-master-categories").disabled = false;
+            document.getElementById("remove-builtin-categories").disabled = false;
+          },
+          error: function(error) {
+            console.log("in error");
+            console.log(error);
+          }
+        });
+      });
+}
 
 function addMasterCategories() {
     Swal.fire({
         title: 'Are you sure?',
-        html:
-            'New categories <b>Bot Mails, Non-Bot Mails</b>, ' +
-            'will be added',
+        html: 'New categories <b>' + $("#cat-list").attr("data-cat") + '</b>, will be added',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#28a745',
@@ -49,16 +71,17 @@ function addMasterCategories() {
         }
     }).then((result) => {
         if (result.value) {
-            var masterCategoriesToAdd = [
-                {
-                    displayName: "Non-Bot Mails",
-                    color: Office.MailboxEnums.CategoryColor.Preset3
-                },
-                {
-                    displayName: "Bot Mails",
-                    color: Office.MailboxEnums.CategoryColor.Preset4
-                }
-            ];
+            var catArr = $("#cat-list").attr("data-cat").split(',');
+            var colorArr = $("#cat-list").attr("data-color").split(',');
+            var masterCategoriesToAdd = [];
+            
+            for (var i = 0; i < catArr.length; i++) {
+                let catCol = "Preset" + colorArr[i]
+                masterCategoriesToAdd.push({
+                    displayName: catArr[i],
+                    color: Office.MailboxEnums.CategoryColor[catCol]
+                })
+            }
 
             Office.context.mailbox.masterCategories.addAsync(masterCategoriesToAdd, function (asyncResult) {
                 if (asyncResult.status === Office.AsyncResultStatus.Succeeded) {
@@ -84,9 +107,7 @@ function addMasterCategories() {
 function removeMasterCategories() {
     Swal.fire({
         title: 'Are you sure?',
-        html:
-            'Categories <b>Bot Mails, Non-Bot Mails</b>, ' +
-            'will be deleted',
+        html: 'Categories <b>' + $("#cat-list").attr("data-cat") + '</b>, will be deleted',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#28a745',
@@ -99,7 +120,7 @@ function removeMasterCategories() {
         }
     }).then((result) => {
         if (result.value) {
-            var masterCategoriesToRemove = ["Non-Bot Mails", "Bot Mails"];
+            var masterCategoriesToRemove = $("#cat-list").attr("data-cat").split(',');
 
             Office.context.mailbox.masterCategories.removeAsync(masterCategoriesToRemove, function (asyncResult) {
                 if (asyncResult.status === Office.AsyncResultStatus.Succeeded) {

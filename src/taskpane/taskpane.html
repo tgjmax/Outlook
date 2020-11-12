@@ -12,6 +12,7 @@
 
     <!-- Office JavaScript API -->
     <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
     <!-- For more information on Office UI Fabric, visit https://developer.microsoft.com/fabric. -->
@@ -30,12 +31,14 @@
 
     <div class="container">
         <section class="samples ms-text ms-font-m">
+            <button id="get-master-categories" class="ms-Button btn btn-primary">
+                <input id="cat-list" type="hidden" data-cat="" data-color=""></input>
+                <input id="email" type="hidden" value=""></input>
+                <span class="ms-Button-label">Get categories master list</span>
+            </button>
             <button id="add-master-categories" class="ms-Button btn btn-primary">
                 <span class="ms-Button-label">Add custom categories</span>
             </button>
-            <!-- <button id="get-master-categories" class="ms-Button">
-                <span class="ms-Button-label">Get categories master list</span>
-            </button> -->
             <button id="remove-master-categories" class="ms-Button btn btn-danger">
                 <span class="ms-Button-label">Remove custom categories</span>
             </button>
